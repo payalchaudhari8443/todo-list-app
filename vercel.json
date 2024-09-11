@@ -2,22 +2,28 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
+      "src": "backend/app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb" // Adjust if needed
+      }
     },
     {
-      "src": "static/**/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "templates/**/*",
-      "use": "@vercel/static"
+      "src": "frontend/**/*",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "frontend"
+      }
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "/backend/app.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/api/tasks.py"
+      "dest": "/frontend/$1"
     }
   ]
 }
